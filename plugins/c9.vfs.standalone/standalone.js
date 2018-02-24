@@ -112,6 +112,7 @@ function plugin(options, imports, register) {
         
         api.updatConfig(opts.options, {
             w: req.params.w,
+            ip: req.remoteAddress,
             token: req.params.token
         });
         
@@ -263,13 +264,18 @@ function plugin(options, imports, register) {
         };
     };    
     api.updatConfig = api.updatConfig || function(opts, params) {
-        var id = params.token;
+        // var id = params.token;
+        var id = params.ip;
         opts.accessToken = id || "token";
         var user = opts.extendOptions.user;
         user.id = id || -1;
-        user.name = id ? "user" + id : "johndoe";
-        user.email = id ? "user" + id + "@c9.io" : "johndoe@example.org";
-        user.fullname = id ? "User " + id : "John Doe";
+        user.name = id ? "user@" + id : "johndoe";
+        user.email = id ? "user@" + id: "johndoe@example.org";
+        user.fullname = id ? "User@" + id : "John Doe";      
+        // user.name = id ? "user" + id : "johndoe";
+        // user.email = id ? "user" + id + "@c9.io" : "johndoe@example.org";
+        // user.fullname = id ? "User " + id : "John Doe";
+        
         opts.workspaceDir = params.w ? params.w : options.workspaceDir;
         opts.projectName = basename(opts.workspaceDir);
         if (!options._projects) {
